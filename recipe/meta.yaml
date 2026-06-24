@@ -1,45 +1,106 @@
-{% set name = "<PLEASE ADD PKG NAME>" %}
-{% set version = "<PLEASE ADD PKG VERSION>" %}
+{% set name = "mteb" %}
+{% set version = "2.16.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: <sha256>
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: e3039cf8c49e385935b19dc783d5d47acd9167bca0ee832872e21ecb8ab1d542
+  - url: https://github.com/embeddings-benchmark/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+    sha256: f89a93ffc7d60240814040a344e5d84a3f0445fd1345112483974d520f2db496
+    folder: gh
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<38]
+  skip: True  # [py<310]
 
 requirements:
   host:
     - python
     - pip
+    - setuptools >=42
+    - wheel
   run:
     - python
+    - datasets >=2.19.0
+    - numpy >=1.23.0,<3.0.0
+    - requests >=2.26.0
+    - scikit-learn >=1.4.0
+    - scipy >=1.14.0
+    - sentence-transformers >=3.0.0
+    - transformers >=4.40.0,<6.0.0
+    - typing-extensions >=4.5.0
+    - pytorch >=2.0.0
+    - tqdm >1.0.0
+    - rich >=13.0.0
+    - pytrec-eval-terrier >=0.5.6
+    - pydantic >=2.11.0
+    - polars >=1.0.0
+  run-constraints:
+    # project.optional-dependencies['image']
+    - pillow >=10.0.1
+    - torchvision >=.2.1
+    # project.optional-dependencies['leaderboard']
+    - gradio ==6.0.1
+    - plotly >=5.24.0,<6.0.0
+    - cachetools >=5.2.0
+    - matplotlib >=3.9.4
+    - pymongo >=4.15.5
+    # project.optional-dependencies['api']
+    - fastapi >=0.110
+    - pydantic-settings >=2.0
+    - uvicorn >=0.27
+    - prometheus-client >=0.20
+    - opentelemetry-sdk >=1.27
+    - opentelemetry-exporter-otlp-proto-http >=1.27
+    - opentelemetry-instrumentation-fastapi >=0.48b0
+
+# Anaconda does not support bibtexparser, so we ignore the test that requires it.
+{% set ignored_tests = "" %}
+{% set ignored_tests = ignored_tests + " --ignore=gh/tests/test_validate_metadata/test_citation_formatting.py" %}
+
+{% set disabled_tests = "" %}
+# Error on CI:
+# 429 Too Many Requests: you have reached your 'api' rate limit.
+# Retry after 183 seconds (0/500 requests remaining in current 300s window).
+# Url: https://huggingface.co/api/datasets/mteb/VOC2007/revision/96d47458fb2f40713997b0ea271688c02bac840b.
+{% set disabled_tests = disabled_tests + "test_dataset_on_hf" %}
 
 test:
+  source_files:
+    - gh/tests
   imports:
-    - {{ name.replace('-', '.') }}
+    - {{ name }}
   requires:
     - pip
+    - pytest
+    - git
+    - pillow >=12.0.0
+    - tabulate >=0.9.0
   commands:
     - pip check
+    - python -m pytest gh/tests -vv -k " not {{ disabled_tests }}" {{ ignored_tests }}
 
 about:
-  home: <PLEASE ADD HOME URL>
-  summary: <PLEASE ADD SUMMARY>
+  home: https://github.com/embeddings-benchmark/mteb
+  summary: Multimodal toolbox for evaluating embeddings and retrieval systems
   description: |
-    <PLEASE ADD DESCRIPTION>
-  license: <PLEASE ADD LICENSE>
-  license_family: <PLEASE ADD LICENSE_FAMILY>
-  license_file: <PLEASE_ADD_LICENSE_FILE>
-  dev_url: <PLEASE ADD DEV URL>
-  doc_url: <PLEASE ADD DOC URL>
+    MTEB is the go-to documentation for evaluating embeddings models across a variety of tasks,
+    modalities and domains. MTEB covers more than a 1000 different tasks from covering a diverse set of tasks
+    from historic Swedish patent classification to documentation retrieval for Python.
+    These tasks spread across more than 1000 languages and cover both image and text tasks.
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+  dev_url: https://github.com/embeddings-benchmark/mteb
+  doc_url: https://docs.mteb.org/get_started/usage/cli/
 
 extra:
   recipe-maintainers:
-    - Jrice1317
+    - KennethEnevoldsen
+    - Muennighoff
+    - nouamanetazi
+    - nreimers

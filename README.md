@@ -1,13 +1,13 @@
-About <pkg_name>-feedstock
+About mteb-feedstock
 =======================
 
 Feedstock license: [BSD-3-Clause](LICENSE)
 
-Home: <home_url>
+Home: https://github.com/embeddings-benchmark/mteb
 
-Package license: <pkg_license>
+Package license: [BSD-3-Clause]
 
-Summary: <pkg_summary>
+Summary: Multimodal toolbox for evaluating embeddings and retrieval systems
 
 
 Current release info
@@ -15,19 +15,19 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-<pkg_name>-green.svg)](https://anaconda.org/anaconda/<pkg_name>) | [![Conda Downloads](https://img.shields.io/conda/dn/anaconda/<pkg_name>.svg)](https://anaconda.org/anaconda/<pkg_name>) | [![Conda Version](https://img.shields.io/conda/vn/anaconda/<pkg_name>.svg)](https://anaconda.org/anaconda/<pkg_name>) | [![Conda Platforms](https://img.shields.io/conda/pn/anaconda/<pkg_name>.svg)](https://anaconda.org/anaconda/<pkg_name>) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-mteb-green.svg)](https://anaconda.org/anaconda/mteb) | [![Conda Downloads](https://img.shields.io/conda/dn/anaconda/mteb.svg)](https://anaconda.org/anaconda/mteb) | [![Conda Version](https://img.shields.io/conda/vn/anaconda/mteb.svg)](https://anaconda.org/anaconda/mteb) | [![Conda Platforms](https://img.shields.io/conda/pn/anaconda/mteb.svg)](https://anaconda.org/anaconda/mteb) |
 
-Installing <pkg_name>
+Installing mteb
 ==================
 
-Installing `<pkg_name>` from the main channel can be achieved by:
+Installing `mteb` from the main channel can be achieved by:
 
 ```
-conda install <pkg_name>
+conda install mteb
 ```
 
-It is possible to list all of the versions of `<pkg_name>` available on your platform with `conda`:
+It is possible to list all of the versions of `mteb` available on your platform with `conda`:
 
 ```
-conda search <pkg_name>
+conda search mteb
 ```
