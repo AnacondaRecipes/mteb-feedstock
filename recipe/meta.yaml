@@ -6,11 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: e3039cf8c49e385935b19dc783d5d47acd9167bca0ee832872e21ecb8ab1d542
   - url: https://github.com/embeddings-benchmark/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
     sha256: f89a93ffc7d60240814040a344e5d84a3f0445fd1345112483974d520f2db496
-    folder: gh
 
 build:
   number: 0
@@ -42,7 +39,7 @@ requirements:
   run-constraints:
     # project.optional-dependencies['image']
     - pillow >=10.0.1
-    - torchvision >=.2.1
+    - torchvision >=0.2.1
     # project.optional-dependencies['leaderboard']
     - gradio ==6.0.1
     - plotly >=5.24.0,<6.0.0
@@ -59,19 +56,17 @@ requirements:
     - opentelemetry-instrumentation-fastapi >=0.48b0
 
 # Anaconda does not support bibtexparser, so we ignore the test that requires it.
-{% set ignored_tests = "" %}
-{% set ignored_tests = ignored_tests + " --ignore=gh/tests/test_validate_metadata/test_citation_formatting.py" %}
+{% set ignored_tests = " --ignore=tests/test_validate_metadata/test_citation_formatting.py" %}
 
-{% set disabled_tests = "" %}
 # Error on CI:
 # 429 Too Many Requests: you have reached your 'api' rate limit.
 # Retry after 183 seconds (0/500 requests remaining in current 300s window).
 # Url: https://huggingface.co/api/datasets/mteb/VOC2007/revision/96d47458fb2f40713997b0ea271688c02bac840b.
-{% set disabled_tests = disabled_tests + "test_dataset_on_hf" %}
+{% set disabled_tests = "test_dataset_on_hf" %}
 
 test:
   source_files:
-    - gh/tests
+    - tests
   imports:
     - {{ name }}
   requires:
@@ -82,7 +77,7 @@ test:
     - tabulate >=0.9.0
   commands:
     - pip check
-    - python -m pytest gh/tests -vv -k " not {{ disabled_tests }}" {{ ignored_tests }}
+    - python -m pytest tests -vv -k " not {{ disabled_tests }}" {{ ignored_tests }}
 
 about:
   home: https://github.com/embeddings-benchmark/mteb
